@@ -62,9 +62,9 @@ Keys:   .string "!AHILO"
   
         
         la x9, Output  # x9 = Base address of Output
-        li x6, 0       # x6 = i = 0 (index)
-        li x7, 7       # x7 = Loop Limit (7)
-        li x8, 33      # x8 = ASCII value for '!' (MUST be loaded for beq comparison)
+        addi x6, 0       # x6 = i = 0 (index)
+        addi x7, 7       # x7 = Loop Limit (7)
+        addi x8, 33      # x8 = ASCII value for '!' (MUST be loaded for beq comparison)
 
 loop:
         # Check loop condition: if (i >= 7) goto loop_end
@@ -78,7 +78,7 @@ loop:
         lb x5, 0(x8)   # x5 = Output[i] (Character value)
         
         # 3. Restore x8 ('!' constant)
-        li x8, 33      
+        addi x8, 33      
 
         # 4. Check for '!' (If char == '!')
         beq x5, x8, skip_if # If x5 (char) == x8 ('!'), skip.
@@ -92,7 +92,7 @@ loop:
         sb x5, 0(x8)   # Store converted character back into Output[i]
         
         # 7. Restore x8
-        li x8, 33      
+        addi x8, 33      
 
 skip_if:
         # Increment Index: i++
