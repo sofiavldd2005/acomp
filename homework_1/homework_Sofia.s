@@ -62,7 +62,7 @@ Keys:   .string "!AHILO"
         # x9 = Base address of Output, still is defined as such from QUESTION 6
         addi x6, x0, 0       # x6 = i = 0 (index)
         addi x7, x0, 7       # x7 = Loop Limit (7)
-        addi x5, x0, 0x21    # x8 = ASCII value for '!' (MUST be loaded for beq comparison)
+        addi x5, x0, 0x21    # x5 = ASCII value for '!' (MUST be loaded for beq comparison)
 
 loop:
         # Check loop condition: if (i >= 7) goto loop_end
