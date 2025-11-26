@@ -22,9 +22,11 @@ Keys:   .string "!AHILO"
         lb x7, 3(x8)
         sb x7, 1(x9)
 
-        # '!' (Keys[0]) -> Output[2]
+        # '!' (Keys[0]) -> Output[2] 
         lb x7, 0(x8)
         sb x7, 2(x9)
+        # '!' (Keys[0]) -> Output[6] - Reusing the address of '!'
+        sb x7, 6(x9)
 
         # 'O' (Keys[5]) -> Output[3]
         lb x7, 5(x8)
@@ -35,11 +37,9 @@ Keys:   .string "!AHILO"
         sb x7, 4(x9)
 
         # 'A' (Keys[1]) -> Output[5]
-        # '!' (Keys[0]) -> Output[6] - Reusing the address of '!'
         lb x7, 1(x8)   # Load 'A'
         sb x7, 5(x9)   # Output[5] = 'A'
-        lb x7, 0(x8)   # Load '!'
-        sb x7, 6(x9)   # Output[6] = '!'
+  
         # Null terminator (\0) at Output[7]
         # Since Output is .zero 8, Output[7] is already 0. We can omit the 'li x7, 0; sb x7, 7(x6)'
         # or we can explicitly place it if the array was not pre-zeroed.
@@ -58,43 +58,32 @@ Keys:   .string "!AHILO"
         ### TODO ###
         # here you should provide 
         # your code for QUESTION 7
-        
-  
-        
-        la x9, Output  # x9 = Base address of Output
-        addi x6, x6, 0       # x6 = i = 0 (index)
-        addi x7, x7, 7       # x7 = Loop Limit (7)
-        addi x8, x8, 33      # x8 = ASCII value for '!' (MUST be loaded for beq comparison)
+      
+        # x9 = Base address of Output, still is defined as such from QUESTION 6
+        addi x6, x0, 0       # x6 = i = 0 (index)
+        addi x7, x0, 7       # x7 = Loop Limit (7)
+        addi x5, x0, 0x21    # x8 = ASCII value for '!' (MUST be loaded for beq comparison)
 
 loop:
         # Check loop condition: if (i >= 7) goto loop_end
         bge x6, x7, loop_end
 
         # --- LOAD CHARACTER ---
-        # 1. Calculate Address into x8
-        add x8, x9, x6 # x8 = &Output + i. (x8, '!', is destroyed)
 
-        # 2. Load Output[i] into x5 (x5 is set here, no prior init needed)
-        lb x5, 0(x8)   # x5 = Output[i] (Character value)
-        
-        # 3. Restore x8 ('!' constant)
-        addi x8, 33      
+        # 1. Load Output[i] into x8 (The Keys vector will one by one get distroyed)
+        lb x8, 0(x9)   # x8 = Output[i] (Character value)     
 
         # 4. Check for '!' (If char == '!')
-        beq x5, x8, skip_if # If x5 (char) == x8 ('!'), skip.
+        beq x5, x8, skip_if # If x5 ('!') == x8 (char), skip.
 
         # 5. Perform conversion: Output[i] += 32 (Using immediate 32)
-        addi x5, x5, 32 # x5 = x5 + 32 (Lowercase conversion)
-        
-        # --- STORE CHARACTER ---
-        # 6. Store Back (Address must be recalculated)
-        add x8, x9, x6 # x8 now holds the address of Output[i]. ('!' is destroyed)
-        sb x5, 0(x8)   # Store converted character back into Output[i]
-        
-        # 7. Restore x8
-        addi x8, 33      
+        addi x8, x8, 32 # x8 = x8 + 32 (Lowercase conversion)
+        sb x8, 0(x9) # loading value in x8 back into the correct position in the Output
 
 skip_if:
+        #Incrementing 1 to i on Output[i]
+        addi x9, x9, 1 # x9 = &Output + i
+    
         # Increment Index: i++
         addi x6, x6, 1 
         
