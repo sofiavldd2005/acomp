@@ -20,6 +20,19 @@ str:  .string "The string length is "
     li a7, 1
     ecall
     addi sp, sp, 8
+    
+    la a0, str2 
+    li a2, 1
+    jal ra, strlen
+    addi sp, sp, -8
+    sw a0, 0(sp)
+    la, a0, str
+    li a7, 4
+    ecall
+    lw a0, 0(sp)
+    li a7, 1
+    ecall
+    addi sp, sp, 8
     li a7, 10
     ecall
 strlen: 
