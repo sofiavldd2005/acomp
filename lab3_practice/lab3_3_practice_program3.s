@@ -2,12 +2,11 @@
 
 str1: .string "ola mundo"
 str2: .string "hello world"
-str:  .string "The string length is "
-
+str:  .string "\nThe string length is: "
 .text
     la a0, str1
 
-    li a2, 1
+   
     jal ra, strlen
     
     #store a0 in stack so we can print a string first
@@ -22,7 +21,7 @@ str:  .string "The string length is "
     addi sp, sp, 8
     
     la a0, str2 
-    li a2, 1
+    
     jal ra, strlen
     addi sp, sp, -8
     sw a0, 0(sp)
@@ -35,16 +34,20 @@ str:  .string "The string length is "
     addi sp, sp, 8
     li a7, 10
     ecall
-strlen: 
-    #uses a0 for the base address, a1 for str[i] and a2 for i
+strlen:    #uses a0 for the base address, a1 for str[i] and a2 for i
+    li a2, 1
+    loop:    
     lb a1, 0(a0)
-    bnez a1, while
-    mv a0, a2
-    jr ra
     
-while:
+    beqz a1, end_loop
     addi a0,a0,1
     addi a2, a2, 1
-    j strlen
+    j loop
+    
+    jr ra
+    
+end_loop:
+    mv a0, a2
+    jr ra
 
     
