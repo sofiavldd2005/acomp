@@ -1,8 +1,8 @@
 .data
     a: .word 1
     b: .word 3
-    arr: .word 3, 20, -10, 3, 1
-    N: .word 5
+    arr: .word 3, 20, -10, 3, 1, 9
+    N: .word 6
     txt_min: .string "Min: "
     txt_max: .string " Max: "
     txt_swap: .string " Swapped: "
@@ -119,6 +119,7 @@ do_swapp:
  ## sort takes an a array and it  sorts it in a decreasing order 
  # array sort(array[], int N) 
 sort: 
+
 ## assuming base of the array in a2 , 
 #a1 for N
 #t0 for i
